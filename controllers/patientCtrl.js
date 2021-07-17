@@ -28,7 +28,7 @@ const registerPatient =  async(req,res) => {
 }
 
 const loginPatient = async(req, res) => {
-    console.log('you did hit here')
+
     patient = await Patient.findOne({})
     
     if(patient) {
@@ -46,19 +46,91 @@ const loginPatient = async(req, res) => {
 const getPatients = async(req,res) => {
     const patients = await Patient.find();
     res.send(patients)
-    console.log(patients.length)
 }
 
-// sort patients by gender
-const searchByGender = async(req,res) => {
-    const male = req.params.query.male
-    if(male){
-        const patients = await Patients.find({gender:'M'})
-console.log(`males are  ${patients.length}`)
+// Sorting patients by age, gender and BMI
+const sort = async(req,res) => {    
+    const filter = req.query
+    if (filter.hasOwnProperty('gender')) {
+            // sort patients by gender
+            const male = filter.gender === "male"
+            const female = filter.gender === "female"
+            if (male) {
+                const patients = await Patient.find({gender:'M'})
+                res.send(patients)    
+            } else if (female) {
+                const patients = await Patient.find({gender: 'F'})
+                res.send(patients)
+                
+            } else{
+                res.send("Invalid search!")
+            }
+        
+            // sorting patients by age
+    } else if (filter.hasOwnProperty('age')) {
+       
+            const levelOne = '0 - 29';
+            const levelTwo = '30 - 59';
+            const levelThree = '60 - 89';
+            const levelFour = '90 and above';
+                //age bracket 0 - 29
+                if (filter.age == levelOne) {
+                    const patients = await Patient.find({age: {$lte :29, $gte: 0}});
+                   
+                    res.send(patients)
+                } else if (filter.age == levelTwo) {
+                    // age bracket 30 - 59;
+                    const patients = await Patient.find({age: {$lte :59, $gte: 30}})
+                                       res.send(patients)
+                } else if (filter.age == levelThree) {
+                    // age bracket 60 - 89;
+                    const patients = await Patient.find({age: {$lte :89, $gte:  60}})
+                                       res.send(patients)
+                } else if (filter.age == levelFour) {
+
+                    // age bracket 90 and above;
+                    const patients  = await Patient.find({age:{$gte: 90}})
+                                       res.send(patients)
+                } else {
+                    res.send("Invalid search!")
+                }
+        // filter by BMI 
+    } else if (filter.hasOwnProperty('bmi')) {
+       
+         const levelOne = 'below 18.5';
+         const levelTwo = '18.5 - 24.9';
+        const levelThree = '25.0 - 29.9';
+         const levelFour = '30.0 and above';
+
+        if (filter.bmi == levelOne) {
+            // below 18.5
+             const patients = await Patient.find({bmi: {$lt: 18.5 }});
+             res.send(patients)
+             
+        } else if(filter.bmi == levelTwo) {
+            //  18.5 - 24.9 
+              const patients  = await Patient.find({bmi: {$lte :24.9, $gte:18.5 }});
+                res.send(patients)
+
+        } else if (filter.bmi == levelThree) {
+            // 25.0 - 29.9
+              const patients  = await Patient.find({bmi: {$lte :29.9, $gte: 25.0}});
+             
+              res.send(patients)      
+        } else if( filter.bmi == levelFour) {
+            //  30.0 and above
+              const patients  = await Patient.find({bmi: { $gte: 30}});
+             
+              res.send(patients)
+        } else {
+            res.send("Invalid search!")
+        }
+           
     } else{
-        const patients = await Patients.find({gender:'F'})
-        console.log(`females are  ${patients.length}`)
-    }
-
+        res.send("Invalid search!")
+            }
+    
 }
-module.exports = {registerPatient, loginPatient, getPatients,searchByGender}
+
+
+module.exports = {registerPatient, loginPatient, getPatients, sort}
