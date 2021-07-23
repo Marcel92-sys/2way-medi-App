@@ -15,18 +15,17 @@ const patientSchema =  new mongoose.Schema({
     picture:{type: String, },
     encounter:[{
         date:{ type: Date, default: Date.now()},
-        time:{},
         visitType:{},
         weight:{type: Number},
         height:{type: Number},
         bmi:{type: Number},
         bloodPressure:{type: Number},
         temperature:{type: Number},
-        respiratoryRate:{type: Number},
+        respiratoryRate:{},
         complaint:{type: String},
         diagnosis:{type: String, enum: ['Malaria', 'Hypertension','Pneumonia', 'Diabetes']},
-        treatment:{type: String},
-        heldBy:{type: mongoose.Schema.Types.ObjectId, ref:'HealthWorker'}
+        treatmentPlan:{type: String},
+        heldBy:{type: mongoose.Schema.Types.ObjectId, ref:'HealthWorker', required:"Who is making this encounter"}
 
     }]
 })

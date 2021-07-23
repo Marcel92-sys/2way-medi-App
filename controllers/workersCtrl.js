@@ -1,5 +1,6 @@
 const crypto = require('bcryptjs')
 const HealthWorker = require('../models/HealthWorker');
+const Patient = require('../models/Patient');
 const generateToken = require('./auth');
 
 // register a new healthWorker
@@ -42,11 +43,28 @@ const register = async(req, res) => {
 };
 
 
-const getWorkers = async(req,res) => {
-    const users = await HealthWorker.find({});
+const getWorkers = async(req , res) => {
+    const users = await HealthWorker.find({}).select('name surname gender')
 
     res.send(users)
     console.log(users.length)
 }
 
-module.exports = {register, getWorkers}
+
+const saveEncounter = async(req, res) => {
+    const encounter = req.body
+    encounter.heldBy = req.params.id;
+    // console.log(encounter)
+    let patient = req.params.patientId;
+    try {
+        
+    const patientEncounter=    await Patient.findOneAndUpdate(patient, {"encounter": encounter},{$new:true})
+    console.log(patientEncounter)    
+         res.send("Encounter Saved")
+    } catch (error) {
+        res.send(error.message)
+        console.log(error)
+    }
+}
+
+module.exports = {register, getWorkers, saveEncounter}
