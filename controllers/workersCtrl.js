@@ -4,6 +4,7 @@ const generateToken = require('./auth');
 
 // register a new healthWorker
 const register = async(req, res) => {
+    
     let name = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
     let surname = req.body.surname.charAt(0).toUpperCase() + req.body.surname.slice(1);;
@@ -40,20 +41,6 @@ const register = async(req, res) => {
     }
 };
 
-const login = async(req, res, next) => {
-
-    console.log('you did hit here')
-    user = await HealthWorker.findOne({name: req.body.name});
-
-    if(user){
-        if(crypto.compareSync(req.body.password, user.password)){
-            res.send({
-
-            })
-        }
-    }
-
-}
 
 const getWorkers = async(req,res) => {
     const users = await HealthWorker.find({});
@@ -62,4 +49,4 @@ const getWorkers = async(req,res) => {
     console.log(users.length)
 }
 
-module.exports = {register, login, getWorkers}
+module.exports = {register, getWorkers}

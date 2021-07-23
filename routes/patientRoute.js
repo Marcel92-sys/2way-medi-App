@@ -1,14 +1,9 @@
 const express = require('express');
-const { registerPatient, loginPatient, getPatients, sort } = require('../controllers/patientCtrl');
+const { registerPatient, getPatients, sort } = require('../controllers/patientCtrl');
 const router = express.Router();
 
 // register route
 router.post('/signup', registerPatient)
-
-
-// login route
-router.post('/signin', loginPatient)
-
 
 // search patients by gender
 router.get("/search", sort)

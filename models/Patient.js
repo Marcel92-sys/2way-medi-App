@@ -6,6 +6,7 @@ const patientSchema =  new mongoose.Schema({
     age:{type: Number},
     gender: {type: String},
     height:{type: Number},
+    password:{type: String},
     weight:{type: Number},
     bmi:{type: Number},
     ward:{type: String, default: 'Ningo'},
