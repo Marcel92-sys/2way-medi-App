@@ -3,29 +3,31 @@ const Patient = require('../models/Patient');
 
 // registers a patient after db query using name, surname and age
 const registerPatient =  async(req,res) => {
-    const user = req.body;
-    user.name = req.body.name.charAt(0).toUpperCase() +req.body.name.slice(1)
-    user.surname = req.body.surname.charAt(0).toUpperCase() +req.body.surname.slice(1)
-    user.bmi =  user.weight/user.height
-    user.password = crypto.hashSync(user.password, 8)
+
+    console.log(req.body)
+    // const user = req.body;
+    // user.name = req.body.name.charAt(0).toUpperCase() +req.body.name.slice(1)
+    // user.surname = req.body.surname.charAt(0).toUpperCase() +req.body.surname.slice(1)
+    // user.bmi =  user.weight/user.height
+    // user.password = crypto.hashSync(user.password, 8)
 
    
-    try {
+    // try {
         
-      const existingUser =  await Patient.findOne({name: user.name,surname:user.surname,age:user.age});
-      if (!existingUser) {
+    //   const existingUser =  await Patient.findOne({name: user.name,surname:user.surname,age:user.age});
+    //   if (!existingUser) {
 
-          patient = new Patient(user)
-            const newPatient = await patient.save()
-            res.send(`New user ${newPatient.name} has been created.`)
-            const patients = await Patient.find();
-            console.log(patients.length)
-      } else{
-            res.send("A user with these credentials already exist.")
-      }
-    } catch (error) {
-        res.send(error.message)
-    }
+    //       patient = new Patient(user)
+    //         const newPatient = await patient.save()
+    //         res.send(`New user ${newPatient.name} has been created.`)
+    //         const patients = await Patient.find();
+    //         console.log(patients.length)
+    //   } else{
+    //         res.send("A user with these credentials already exist.")
+    //   }
+    // } catch (error) {
+    //     res.send(error.message)
+    // }
 }
 
 
